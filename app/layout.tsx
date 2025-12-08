@@ -1,7 +1,6 @@
 // app/layout.tsx
 
 import type { Metadata } from 'next'
-import { ClerkProvider } from '@clerk/nextjs'
 import type { ReactNode } from 'react'
 import './globals.css'
 import SiteHeader from '@/components/layout/SiteHeader'
@@ -16,8 +15,7 @@ type RootLayoutProps = {
 }
 
 export default function RootLayout({ children }: RootLayoutProps) {
-  return (
-    <ClerkProvider>     
+  return (    
       <html lang="ko">
         <body className="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
           <SiteHeader />
@@ -27,6 +25,5 @@ export default function RootLayout({ children }: RootLayoutProps) {
           </main>
         </body>
       </html>
-    </ClerkProvider>
   )
 }

@@ -3,21 +3,13 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { Menu, Search, User } from 'lucide-react'
-import {
-  SignedIn,
-  SignedOut,
-  useUser,
-  UserButton,
-} from '@clerk/nextjs'
+import { Menu, Search, User, LogOut } from 'lucide-react'
 
 export default function SiteHeader() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [showLoginPrompt, setShowLoginPrompt] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false) // 로그인 상태
   const router = useRouter()
-  const { user } = useUser()
-
-  const isLoggedIn = !!user
 
   const handleProtectedAction = (path?: string) => {
     if (isLoggedIn) {
@@ -25,6 +17,16 @@ export default function SiteHeader() {
     } else {
       setShowLoginPrompt(true)
     }
+  }
+
+  const handleLogin = () => {
+    setIsLoggedIn(true)
+    setShowLoginPrompt(false)
+  }
+
+  const handleLogout = () => {
+    setIsLoggedIn(false)
+    router.push('/')
   }
 
   return (
@@ -78,20 +80,30 @@ export default function SiteHeader() {
               />
             </div>
 
-            {/* 로그인 / 프로필 */}
-            <SignedOut>
-              <Link
-                href="/login"
+            {/* 로그인 / 프로필 / 로그아웃 버튼 */}
+            {!isLoggedIn ? (
+              <button
+                onClick={() => setShowLoginPrompt(true)}
                 className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
               >
                 <User className="w-4 h-4" />
                 로그인
-              </Link>
-            </SignedOut>
-
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
+              </button>
+            ) : (
+              <div className="flex items-center gap-2">
+                <button className="flex items-center gap-1 px-3 py-1.5 bg-gray-200 rounded-lg hover:bg-gray-300">
+                  <User className="w-4 h-4" />
+                  유저
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-1 px-3 py-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                >
+                  <LogOut className="w-4 h-4" />
+                  로그아웃
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
@@ -129,7 +141,7 @@ export default function SiteHeader() {
       </header>
 
       {/* 로그인 유도 팝업 */}
-      {showLoginPrompt && (
+      {showLoginPrompt && !isLoggedIn && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl p-6 w-[90%] max-w-sm text-center space-y-4 shadow-xl">
             <h3 className="text-lg font-semibold">
@@ -137,8 +149,7 @@ export default function SiteHeader() {
             </h3>
 
             <p className="text-sm text-gray-600 leading-relaxed">
-              이 공간은  
-              로그인한 사용자에게만 열려 있어요.
+              이 공간은 로그인한 사용자에게만 열려 있어요.
             </p>
 
             <div className="flex gap-3 justify-center pt-2">
@@ -150,16 +161,11 @@ export default function SiteHeader() {
               </button>
 
               <button
-                onClick={() => {
-                  setShowLoginPrompt(false)
-                  setMobileOpen(false)
-                  router.push('/login')
-                }}
+                onClick={handleLogin}
                 className="px-4 py-2 rounded-lg bg-blue-600 text-white"
               >
                 로그인하기
               </button>
-
             </div>
           </div>
         </div>
