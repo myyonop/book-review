@@ -93,12 +93,12 @@ export default function LoginPage() {
         {/* 🌱 회원가입 제안 */}
         {showSignupSuggestion && (
           <div className="pt-4 text-center text-sm text-gray-600">
-            <p>아직 계정이 없습니다.</p>
+            <p>아직 계정이 없는 이메일이야.</p>
             <button
               onClick={() => router.push("/signup")}
               className="mt-2 underline text-black hover:text-gray-700"
             >
-              회원가입을 통해 더 많은 정보를 확인하세요!
+              회원가입 하러 갈까?
             </button>
           </div>
         )}

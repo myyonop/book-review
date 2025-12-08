@@ -5,10 +5,16 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Menu, Search, User, LogOut } from 'lucide-react'
 
+type UserType = {
+  name: string
+  email: string
+}
+
 export default function SiteHeader() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [showLoginPrompt, setShowLoginPrompt] = useState(false)
-  const [isLoggedIn, setIsLoggedIn] = useState(false) // 로그인 상태
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [user, setUser] = useState<UserType | null>(null)
   const router = useRouter()
 
   const handleProtectedAction = (path?: string) => {
@@ -20,11 +26,16 @@ export default function SiteHeader() {
   }
 
   const handleLogin = () => {
+    // 예시: 로그인 성공 시
+    const loggedInUser = { name: '홍길동', email: 'hong@test.com' }
+    setUser(loggedInUser)
     setIsLoggedIn(true)
     setShowLoginPrompt(false)
+    router.push('/mypage') // 로그인 후 마이페이지 이동
   }
 
   const handleLogout = () => {
+    setUser(null)
     setIsLoggedIn(false)
     router.push('/')
   }
@@ -80,15 +91,15 @@ export default function SiteHeader() {
               />
             </div>
 
-            {/* 로그인 / 프로필 / 로그아웃 버튼 */}
+            {/* 로그인 / 유저 / 로그아웃 */}
             {!isLoggedIn ? (
-              <button
-                onClick={() => setShowLoginPrompt(true)}
+              <Link
+                href="/login"
                 className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
               >
                 <User className="w-4 h-4" />
                 로그인
-              </button>
+              </Link>
             ) : (
               <div className="flex items-center gap-2">
                 <button className="flex items-center gap-1 px-3 py-1.5 bg-gray-200 rounded-lg hover:bg-gray-300">

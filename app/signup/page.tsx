@@ -1,12 +1,18 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import PasswordGenerator from "@/components/PasswordGenerator";
+import PasswordStrength from "@/components/PasswordStrength";
+
 
 export default function SignupPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState<string>(""); const [password, setPassword] = useState<string>("");
   const [otp, setOtp] = useState("");
   const [step, setStep] = useState<"signup" | "verify">("signup");
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [generatedPassword, setGeneratedPassword] = useState<string | null>( null ); const [message, setMessage] = useState<string>("");
+
 
   const router = useRouter();
 
@@ -45,19 +51,53 @@ export default function SignupPage() {
   };
 
   return (
-    <div>
-      {step === "signup" ? (
-        <div>
-          <input value={email} onChange={e => setEmail(e.target.value)} placeholder="이메일" />
-          <input value={password} onChange={e => setPassword(e.target.value)} placeholder="비밀번호" type="password" />
-          <button onClick={handleSignup}>가입하기</button>
-        </div>
-      ) : (
-        <div>
-          <input value={otp} onChange={e => setOtp(e.target.value)} placeholder="OTP 입력" />
-          <button onClick={handleVerify}>인증하기</button>
-        </div>
-      )}
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <section className="w-96 bg-white p-6 rounded-xl shadow space-y-4">
+        {step === "signup" ? (
+          <div>
+            <input 
+            type="email" 
+            placeholder="이메일" 
+            className="w-full border rounded px-3 py-2" 
+            value={email} 
+            onChange={(e) => setEmail(e.target.value)} 
+            />
+
+            {/* 🔐 비밀번호 입력 + 적용 버튼 */} 
+            <div className="flex items-center gap-2"> 
+              <input 
+              type="password" 
+              placeholder="비밀번호" 
+              className="flex-1 border rounded px-3 py-2" 
+              value={password} 
+              onChange={(e) => { 
+                setPassword(e.target.value);
+                setGeneratedPassword(null);
+                }} 
+              /> 
+              
+              {generatedPassword && ( 
+                <button 
+                type="button" 
+                onClick={() => setPassword(generatedPassword)} 
+                className="px-3 py-2 text-sm bg-gray-100 rounded hover:bg-gray-200" 
+                > 
+                  적용 
+                </button> 
+              )} 
+            </div>
+            
+            {/* 🎲 비밀번호 추천 */} <PasswordGenerator onGenerate={(pw) => { setGeneratedPassword(pw); setPassword(pw); }} /> {message && ( <p className="text-sm text-center text-red-500">{message}</p> )}
+            
+            <button onClick={handleSignup}>가입하기</button>
+          </div>
+        ) : (
+          <div>
+            <input value={otp} onChange={e => setOtp(e.target.value)} placeholder="OTP 입력" />
+            <button onClick={handleVerify}>인증하기</button>
+          </div>
+        )}
+      </section>
     </div>
   );
 }
