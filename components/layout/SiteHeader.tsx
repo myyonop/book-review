@@ -93,19 +93,19 @@ export default function SiteHeader() {
         {/* 로그인 / 사용자 영역 */}
         <div className="site-header-auth">
           {user ? (
-            <div className="flex items-center gap-3">
+            <div className="btn">
               <Link href="/mypage" className="site-user-name">
                 {user.name}님
               </Link>
               <button
                 onClick={handleLogout}
-                className="site-logout-button"
+                className="btn"
               >
                 로그아웃
               </button>
             </div>
           ) : (
-            <Link href="/login" className="site-login-button">
+            <Link href="/login" className="btn">
               로그인
             </Link>
           )}

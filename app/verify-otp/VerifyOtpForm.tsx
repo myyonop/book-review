@@ -66,7 +66,7 @@ export default function VerifyOtpForm() {
             setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))
           }
           placeholder="000000"
-          className="w-full border rounded-lg px-3 py-2 text-center text-lg tracking-widest"
+          className="input"
         />
 
         {error && <p className="text-sm text-red-500 text-center">{error}</p>}
@@ -75,14 +75,14 @@ export default function VerifyOtpForm() {
           <button
             onClick={handleVerify}
             disabled={loading}
-            className="w-full py-2 bg-blue-600 text-white rounded-lg disabled:opacity-50"
+            className="btn"
           >
             인증하기
           </button>
         ) : (
           <button
             onClick={handleLogout}
-            className="w-full py-2 bg-red-600 text-white rounded-lg"
+            className="btn"
           >
             로그아웃
           </button>

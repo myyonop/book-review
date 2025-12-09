@@ -14,17 +14,17 @@ export default function SignupCompletePage() {
           이메일 인증 및 회원가입이 완료되었습니다.
         </p>
 
-        <div className="space-y-3">
+        <div>
           <Link
             href="/login"
-            className="block w-full bg-black text-white py-3 rounded-xl font-medium hover:opacity-90 transition"
+            className="btn"
           >
             로그인하러 가기
           </Link>
 
           <Link
             href="/"
-            className="block w-full bg-gray-100 text-gray-700 py-3 rounded-xl font-medium hover:bg-gray-200 transition"
+            className="btn"
           >
             홈으로 돌아가기
           </Link>

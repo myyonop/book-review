@@ -55,8 +55,9 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div>
       <section className="section">
+        <h1 className='section-title'>회원가입</h1>
         {step === 'signup' ? (
           <div>
             <input
@@ -64,6 +65,7 @@ export default function SignupPage() {
               placeholder="이메일"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              className='input'
             />
             {/* 🔐 비밀번호 입력 + 적용 버튼 */}
             <div>
@@ -75,12 +77,14 @@ export default function SignupPage() {
                   setPassword(e.target.value)
                   setGeneratedPassword(null)
                 }}
+                className='input'
               />
 
               {generatedPassword && (
                 <button
                   type="button"
                   onClick={() => setPassword(generatedPassword)}
+                  className='btn'
                 >
                   적용
                 </button>
@@ -95,7 +99,7 @@ export default function SignupPage() {
               }}
             />{' '}
             {message && <p>{message}</p>}
-            <button onClick={handleSignup}>가입하기</button>
+            <button className='btn' onClick={handleSignup}>가입하기</button>
           </div>
         ) : (
           <div>
@@ -103,8 +107,9 @@ export default function SignupPage() {
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
               placeholder="OTP 입력"
+              className='input'
             />
-            <button onClick={handleVerify}>인증하기</button>
+            <button className='btn' onClick={handleVerify}>인증하기</button>
           </div>
         )}
       </section>

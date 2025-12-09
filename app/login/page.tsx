@@ -1,5 +1,3 @@
-// app/login/page.tsx
-
 'use client'
 
 import { useState } from 'react'
@@ -53,19 +51,14 @@ export default function LoginPage() {
       // ✅ 로그인 성공 → localStorage에 사용자 정보 저장
       try {
         if (typeof window !== 'undefined') {
-          localStorage.setItem('isLoggedIn', 'true') // ✅ 이 줄 추가
           localStorage.setItem('userEmail', email)
-
+          // 간단히 이메일 앞부분을 닉네임처럼 사용
           const nameFromEmail = email.split('@')[0] || email
           localStorage.setItem('userName', nameFromEmail)
         }
       } catch (e) {
         console.error('Failed to save login info to localStorage', e)
       }
-
-      // ✅ 로그인 상태 변경 알림
-      window.dispatchEvent(new Event('auth-change'))
-
 
       // 기존 동작 유지: 홈으로 이동
       router.push('/')
@@ -78,9 +71,10 @@ export default function LoginPage() {
 
   return (
     <section className="section">
-      <h1>로그인</h1>
+      <h1 className='section-title'>로그인</h1>
 
       <input
+        className='input'
         type="email"
         placeholder="이메일"
         value={email}
@@ -88,6 +82,7 @@ export default function LoginPage() {
       />
 
       <input
+        className='input'
         type="password"
         placeholder="비밀번호"
         value={password}
@@ -96,16 +91,16 @@ export default function LoginPage() {
 
       {message && <p>{message}</p>}
 
-      <button onClick={handleLogin} disabled={loading}>
+      <button className='btn' onClick={handleLogin} disabled={loading}>
         {loading ? '확인 중…' : '로그인'}
       </button>
 
       {/* 🌱 회원가입 제안 */}
       {showSignupSuggestion && (
         <div>
-          <p>아직 계정이 없는 이메일입니다.</p>
-          <button onClick={() => router.push('/signup')}>
-            회원가입 하시겠습니까?
+          <p>아직 계정이 없는 이메일이야.</p>
+          <button className='btn' onClick={() => router.push('/signup')}>
+            회원가입 하러 갈까?
           </button>
         </div>
       )}
