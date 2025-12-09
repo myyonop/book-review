@@ -3,7 +3,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 type UserInfo = {
   email: string
@@ -11,33 +11,33 @@ type UserInfo = {
 }
 
 export default function MyPage() {
-  const router = useRouter()
   const [user, setUser] = useState<UserInfo | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    if (typeof window === 'undefined') return
+
     try {
       const email = localStorage.getItem('userEmail')
       const name = localStorage.getItem('userName')
 
-      if (!email) {
-        // 🚪 로그인 안 됐으면 들이지 않음
-        router.replace('/login')
-        return
+      if (email) {
+        setUser({
+          email,
+          name: name || '',
+        })
+      } else {
+        setUser(null)
       }
-
-      setUser({
-        email,
-        name: name || '',
-      })
     } catch (e) {
       console.error('Failed to load user info', e)
-      router.replace('/login')
+      setUser(null)
     } finally {
       setLoading(false)
     }
-  }, [router])
+  }, [])
 
+  // ⏳ 확인 중
   if (loading) {
     return (
       <main className="min-h-screen flex items-center justify-center">
@@ -46,6 +46,29 @@ export default function MyPage() {
     )
   }
 
+  // 🔒 로그인 필요 상태
+  if (!user) {
+    return (
+      <main className="min-h-screen flex items-center justify-center px-4">
+        <div className="w-full max-w-md border rounded-xl p-6 space-y-4 text-center">
+          <h1 className="text-xl font-semibold">마이페이지</h1>
+
+          <p className="text-gray-600">
+            로그인이 필요합니다.
+          </p>
+
+          <Link
+            href="/login"
+            className="inline-block px-4 py-2 rounded-md border text-sm hover:bg-gray-50"
+          >
+            로그인하러 가기
+          </Link>
+        </div>
+      </main>
+    )
+  }
+
+  // ✅ 로그인된 상태
   return (
     <main className="min-h-screen flex items-center justify-center px-4">
       <div className="w-full max-w-md border rounded-xl p-6 space-y-4">
@@ -54,13 +77,13 @@ export default function MyPage() {
         <div className="space-y-2">
           <p>
             <span className="font-medium">이메일: </span>
-            {user!.email}
+            {user.email}
           </p>
 
-          {user!.name && (
+          {user.name && (
             <p>
               <span className="font-medium">이름(닉네임): </span>
-              {user!.name}
+              {user.name}
             </p>
           )}
 
